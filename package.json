@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@particle-network/connect": "^1.1.0"
+  }
+}
