@@ -3,19 +3,22 @@ import Talk from 'talkjs';
 
 export const ChatComponent: React.FC = () => {
     const chatboxEl = useRef<HTMLDivElement>(null);
+    const [userInput, setUserInput] = useState('');
+
+    
+    const [conversation, setConversation] = useState(null);
 
     useEffect(() => {
         Talk.ready.then(async () => {
             const me = new Talk.User({
-                id: "myUserId",
+                id: "123",
                 name: "Me",
-                welcomeMessage: "Hey, that's me!"
             });
         
             const other = new Talk.User({
-                id: "botUserId",
-                name: "Bot",
-                welcomeMessage: "Hey, I'm your bot!"
+                id: "12322",
+                name: "Rakuten",
+                welcomeMessage: "Hey, welcome to Rakuten, how may I help you?"
             });
             
             const session = new Talk.Session({
@@ -28,24 +31,20 @@ export const ChatComponent: React.FC = () => {
             conversation.setParticipant(me);
             conversation.setParticipant(other);
 
-            // Send a message as 'me'
-            const initialMessage = "Hello I want to register!";
-            conversation.sendMessage(initialMessage);
+            
 
-            // Fetch and display the bot's response
-            const botResponse = await getBotResponse(initialMessage);
-            conversation.sendMessage(botResponse);
 
             const chatbox = session.createChatbox();
             chatbox.select(conversation);
-            
+
             if (chatboxEl.current) {
                 chatbox.mount(chatboxEl.current);
             }
         });
     }, []);
 
-    async function getBotResponse(message: string): Promise<string> {
+
+    async function getOpenAIResponse(message: string): Promise<string> {
         const payload = {
             messages: [
                 {
@@ -64,12 +63,21 @@ export const ChatComponent: React.FC = () => {
         });
     
         const data = await response.json();
-        return data.messages;
+        return data['messages'];
     }
 
     return (
-        <div ref={chatboxEl} style={{ height: "500px" }}></div>
+        <div>
+            <div ref={chatboxEl} style={{ height: "500px" }}></div>
+            <input
+                value={userInput}
+                onChange={e => setUserInput(e.target.value)}
+                placeholder="Type your message here..."
+            />
+            {/* <button onClick={handleSendMessage}>Send</button> */}
+        </div>
     );
 }
+
 
 export default ChatComponent;
