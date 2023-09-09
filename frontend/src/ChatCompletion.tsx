@@ -5,8 +5,6 @@ export const ChatComponent: React.FC = () => {
     const chatboxEl = useRef<HTMLDivElement>(null);
     const [userInput, setUserInput] = useState('');
 
-    
-    const [conversation, setConversation] = useState(null);
 
     useEffect(() => {
         Talk.ready.then(async () => {
